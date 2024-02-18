@@ -56,10 +56,10 @@ first() {
 
 second() {
     while true; do
-    if grep -q "session opened" /var/log/auth.log; then
+    if tail -n 1 /var/log/auth.log | grep -q "New session"; then
         break
     fi
-    sleep 10  # Espera 10 segundos antes de verificar novamente
+    sleep 1  
     done
 
     # Remove o crontab
