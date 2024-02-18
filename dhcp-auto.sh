@@ -47,26 +47,16 @@ first() {
     broadcast ${BROADCAST}\n" -e '11,$d' /etc/network/interfaces
     echo -e "${vermelho}Arquivo INTERFACES alterado.${reset}"
 
-    # Crontab e reinicia o sistema
-    echo "@reboot $(realpath "$0") second >> /dev/tty" | sudo crontab -
-    echo -e "${vermelho}Crontab adicionado,(TROQUE PARA REDE INTERNA)...${reset}"
+    # Reinicia o sistema
+    echo -e "${vermelho}TROQUE PARA REDE INTERNA e pressione enter...${reset}"
     read -n1 -s
+    echo -e "${vermelho}O sistema será reinicializado.${reset}"
+    echo -e "${vermelho}logo após execute a segunda parte do script com o parametro 'af'${reset}"
+    sleep 5
     reboot
 }
 
 second() {
-    # Verifica se o usuário logou
-    while true; do
-    if tail -n 2 /var/log/auth.log | grep -q "New session"; then
-        break
-    fi
-    sleep 1  
-    done
-
-    # Remove o crontab
-    sudo crontab -l | grep -v "@reboot $(realpath "$0") second >> /dev/tty" | crontab -
-    echo -e "${vermelho}Crontab removido.${reset}"
-
     # Configurar o dhcpd.conf
     {
         echo "# Configuração do serviço DHCP."
@@ -97,6 +87,7 @@ second() {
 
 # MAIN
 case $1 in
-second)second;;
-*)first;;
+af)second;;
+bf)first;;
+*)echo "use os parametros bf e af";;
 esac
