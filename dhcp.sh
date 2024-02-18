@@ -21,9 +21,9 @@ NAMESERVERS="192.168.0.253, 192.168.15.1, 8.8.8.8, 1.1.1.1"
 first() {
     # Atualiza o sistema
         echo -e "${vermelho}Atualizando o sistema...${reset}"
-        sudo apt update && sudo apt upgrade -y
+        sudo apt update > /dev/null && sudo apt upgrade -y > /dev/null
         echo -e "${vermelho}Sistema atualizado.${reset}"
-        sudo apt install isc-dhcp-server -y
+        sudo apt install isc-dhcp-server -y > /dev/null
         echo -e "${vermelho}Dependencias instaladas.${reset}"
 
 
@@ -76,7 +76,7 @@ first() {
     # Reinicia o sistema
         echo -e "${vermelho}TROQUE PARA REDE INTERNA e pressione enter...${reset}"
         read -n1 -s
-        echo -e "${vermelho}O sistema será reinicializado.${reset}"
+        echo -e "${vermelho}O sistema sera reinicializado.${reset}"
         sleep 5
         reboot
 }
@@ -87,7 +87,7 @@ script_path=$(readlink -f "$0")
 script_dir=$(dirname "$script_path")
 # Verifica se o diretório do script é /home/scripts.
 if [ "$script_dir" != "/home/scripts" ]; then
-  echo -e "${vermelho}Este script precisa ser executado no diretório /home/scripts.${reset}"
+  echo -e "${vermelho}Este script precisa ser executado no diretorio /home/scripts.${reset}"
   exit 1
 fi
 
