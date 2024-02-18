@@ -50,7 +50,8 @@ first() {
 
     # Crontab e reinicia o sistema
     echo "@reboot $(realpath "$0") second" | sudo crontab -
-    echo -e "${vermelho}Crontab adicionado, reinicializando...${reset}"
+    echo -e "${vermelho}Crontab adicionado, reinicializando (TROQUE PARA REDE INTERNA)...${reset}"
+    sleep 10
     reboot
 }
 
@@ -59,10 +60,12 @@ second() {
     sleep 40
     sudo crontab -l | grep -v "@reboot $(realpath "$0") second" | crontab -
     echo -e "${vermelho}Crontab removido.${reset}"
+    mkdir /home/andrelps/passouaqui
 
     # Configurar o dhcpd.conf
     {
         echo "# Configuração do serviço DHCP."
+        echo "authoritative;"
         echo "subnet ${NETWORK} netmask ${NETMASK} {"
         echo "    range ${RANGE};"
         echo "    option domain-name-servers ${NAMESERVERS};"
