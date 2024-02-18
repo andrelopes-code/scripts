@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Parameters
 ifaceIn="enp0s8"
 ifaceEx="enp0s3"

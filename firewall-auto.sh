@@ -23,15 +23,15 @@ first() {
         echo -e "${vermelho}Dependencias instaladas.${reset}"
 
 
+    # Modifica o arquivo hosts
+        sudo sed -i "s/127\.0\.1\.1\t.*/127.0.1.1\t${HOSTNAME}\n${IP_ADDRESS}\t${HOSTNAME}.${DOMAIN}\t${HOSTNAME}/" /etc/hosts
+        echo -e "${vermelho}Arquivo HOSTS alterado.${reset}"
+
+
     # Altera o hostname
         sudo sed -i "s/.*/${HOSTNAME}/" /etc/hostname
         sudo hostname -F /etc/hostname
         echo -e "${vermelho}HOSTNAME alterado.${reset}"
-
-
-    # Modifica o arquivo hosts
-        sudo sed -i "s/127\.0\.1\.1\t.*/127.0.1.1\t${HOSTNAME}\n${IP_ADDRESS}\t${HOSTNAME}.${DOMAIN}\t${HOSTNAME}/" /etc/hosts
-        echo -e "${vermelho}Arquivo HOSTS alterado.${reset}"
 
 
     # Configura a interface de rede
@@ -66,7 +66,7 @@ first() {
         cp /home/scripts/docs/squid.conf /etc/squid/squid.conf
         echo -e "${vermelho}Arquivo [squid.conf] copiado.${reset}"
 
-        cp /home/scripts/docs/files /etc/squid/
+        cp -r /home/scripts/docs/files /etc/squid
         echo -e "${vermelho}Pasta [files] copiada.${reset}"
 
 
@@ -96,6 +96,8 @@ first() {
         reboot
 }
 
+
+# MAIN
 script_path=$(readlink -f "$0")
 script_dir=$(dirname "$script_path")
 # Verifica se o diretório do script é /home/scripts.
@@ -109,7 +111,5 @@ if [ $UID != 0 ]; then
   echo -e "${vermelho}Este script precisa ser executado como root.${reset}"
   exit 1
 fi
-
-
 
 first

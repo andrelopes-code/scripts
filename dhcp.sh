@@ -49,16 +49,7 @@ first() {
         broadcast ${BROADCAST}\n" -e '11,$d' /etc/network/interfaces
         echo -e "${vermelho}Arquivo INTERFACES alterado.${reset}"
 
-    # Reinicia o sistema
-        echo -e "${vermelho}TROQUE PARA REDE INTERNA e pressione enter...${reset}"
-        read -n1 -s
-        echo -e "${vermelho}O sistema será reinicializado.${reset}"
-        echo -e "${vermelho}logo após execute a segunda parte do script com o parametro 'af'${reset}"
-        sleep 5
-        reboot
-}
 
-second() {
     # Configurar o dhcpd.conf
         {
             echo "# Configuração do serviço DHCP."
@@ -81,12 +72,17 @@ second() {
         sudo sed -i "s/INTERFACES=\"\"/INTERFACES=\"${INTERFACE_INTERNA}\"/" /etc/default/isc-dhcp-server
         echo -e "${vermelho}default/isc-dhcp-server configurado.${reset}"
 
-    # Reinicia o serviço DHCP
-        sudo systemctl restart isc-dhcp-server
-        sudo systemctl status isc-dhcp-server
+
+    # Reinicia o sistema
+        echo -e "${vermelho}TROQUE PARA REDE INTERNA e pressione enter...${reset}"
+        read -n1 -s
+        echo -e "${vermelho}O sistema será reinicializado.${reset}"
+        sleep 5
+        reboot
 }
 
 
+# MAIN
 script_path=$(readlink -f "$0")
 script_dir=$(dirname "$script_path")
 # Verifica se o diretório do script é /home/scripts.
@@ -101,9 +97,4 @@ if [ $UID != 0 ]; then
   exit 1
 fi
 
-# MAIN
-case $1 in
-af)second;;
-bf)first;;
-*)echo "use os parametros bf e af";;
-esac
+first
