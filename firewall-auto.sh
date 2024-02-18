@@ -48,35 +48,41 @@ first() {
 
     # Copia os arquivos
     cp /home/scripts/docs/firewall /usr/local/sbin/firewall
+    echo -e "${vermelho}Arquivo [firewall] copiado.${reset}"
+
     cp /home/scripts/docs/sqd /usr/local/sbin/sqd
+     echo -e "${vermelho}Arquivo [sqd] copiado.${reset}"
+
     cp /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED.bk
     cp /home/scripts/docs/HTML.html /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED
+     echo -e "${vermelho}Arquivo [ERR_ACCESS_DENIED] copiado.${reset}"
+
     cp /home/scripts/docs/squid.conf /etc/squid/squid.conf
+    echo -e "${vermelho}Arquivo [squid.conf] copiado.${reset}"
+
     cp /home/scripts/docs/files /etc/squid/
+     echo -e "${vermelho}Pasta [files] copiado.${reset}"
 
     # Cria a pasta cache do squid
     mkdir /etc/squid/cache
     chmod 777 /etc/squid/cache
-    sudo squid -z
+    sudo squid -z > /dev/null
+     echo -e "${vermelho}Pasta [cache] criada.${reset}"
 
     # Arquivo de inicialização do Firewall
     cp /home/scripts/docs/firewall.service /lib/systemd/system/firewall.service
     systemctl daemon-reload
     systemctl enable firewall.service
+     echo -e "${vermelho}Criado serviço para o firewall.${reset}"
 
-
-
-
-
-
-
+    # Modifica o SARG
+    mv /etc/sarg/sarg.conf /etc/sarg/sarg.conf.bk
+    cp /home/scripts/docs/sarg.conf /etc/sarg/sarg.conf
+     echo -e "${vermelho}Editado o arquivo [sarg.conf].${reset}"
 
 
     # Reinicia o sistema
-    echo -e "${vermelho}se as interfaces estão configuradas, pressione enter...${reset}"
-    read -n1 -s
     echo -e "${vermelho}O sistema será reinicializado.${reset}"
-    echo -e "${vermelho}logo após execute a segunda parte do script com o parametro 'af'${reset}"
     sleep 5
     reboot
 }

@@ -1,8 +1,8 @@
 #!/bin/bash
 # Parameters
-ifaceIn=$ifaceIn
-ifaceEx=enp0s3
-localnet=$localnet
+ifaceIn="enp0s8"
+ifaceEx="enp0s3"
+localnet="192.168.0.0/24"
 externet=0
 #===============================================================================================================#
 
