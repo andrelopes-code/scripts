@@ -1,0 +1,13 @@
+#!/bin/bash
+
+case $1 in
+parse|test)squid -k parse;;
+p|permitidos)sudo vi /etc/squid/files/allowed;;
+configure|load) squid -k reconfigure;;
+\s|vi|conf)sudo vi /etc/squid/squid.conf;;
+l|log|logs)sudo vi /var/log/squid/access.log;;
+1|log1|log100)tail -n 100 /var/log/squid/access.log;;
+2|log2|log200)tail -n 200 /var/log/squid/access.log;;
+kill|disable)sudo squid -k interrupt;;
+*)echo "use: 2|log2|log200\n     kill|disable\n     parse|test\n     configure|load\n     vi|conf"
+esac

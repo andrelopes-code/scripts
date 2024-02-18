@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+        <title>Acesso Negado</title>
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css2?family=Just+Sans&display=swap" rel="stylesheet">
+        <style>
+            @keyframes bounceIn {
+                0% { opacity: 0; transform: scale(0.1); }
+                70% { transform: scale(1.2); }
+                100% { opacity: 1; transform: scale(1); }
+            }
+
+
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                font-family: 'Just Sans', sans-serif;
+                background-color: #1c1c1c;
+                color: #ffffff;
+                animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+            }
+
+
+            .container {
+                max-width: 400px;
+                text-align: center;
+                padding: 30px;
+                background-color: #2c2c2c;
+                border-radius: 4px;
+                box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+
+            .header {
+                font-family: 'Just Sans', sans-serif;
+                font-weight: bold;
+                font-size: 37px;
+                margin-bottom: 20px;
+                color: #d93838;
+            }
+
+
+            .content {
+                margin-bottom: 12px;
+                font-weight: bold;
+            }
+            .content2 {
+                margin-bottom: 20px;
+            }
+
+
+            .contact {
+                color: #4ca1af;
+                text-decoration: none;
+                font-weight: bold;
+            }
+        </style>
+</head>
+<body>
+        <div class="container">
+            <h1 class="header">ACESSO NEGADO!</h1>
+            <p class="content">Você não tem autorização para acessar esta página.</p>
+            <p class="content2">Se você acredita que isso é um erro, por favor, entre em contato com o administrador do sistema para obter assistência.</p>
+            <a class="contact" href="mailto:admin@example.com">Contato Administrador</a>
+        </div>
+        <script>
+            // Display an alert message
+            alert("ACESSO NEGADO!");
+        </script>
+</body>
+</html>
