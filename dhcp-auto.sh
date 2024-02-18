@@ -89,6 +89,6 @@ second() {
 
 # MAIN
 case $1 in
-second)first;;
-*)second;;
+second)second;;
+*)first;;
 esac
