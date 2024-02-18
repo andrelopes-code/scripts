@@ -21,7 +21,7 @@ NAMESERVERS="192.168.0.253, 192.168.15.1, 8.8.8.8, 1.1.1.1"
 first() {
     # Atualiza o sistema
     echo -e "${vermelho}Atualizando o sistema...${reset}"
-    sudo apt update && apt upgrade -y
+    sudo apt update && sudo apt upgrade -y
     echo -e "${vermelho}Sistema atualizado.${reset}"
     sudo apt install isc-dhcp-server
     echo -e "${vermelho}Dependencias instaladas.${reset}"
