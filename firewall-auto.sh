@@ -17,9 +17,9 @@ NETWORK="192.168.0.0"
 first() {
     # Atualiza o sistema
         echo -e "${vermelho}Atualizando o sistema...${reset}"
-        sudo apt update && sudo apt upgrade -y
+        sudo apt update && sudo apt upgrade -y > /dev/null
         echo -e "${vermelho}Sistema atualizado.${reset}"
-        sudo apt install squid apache2 sarg -y
+        sudo apt install squid apache2 sarg -y > /dev/null
         echo -e "${vermelho}Dependencias instaladas.${reset}"
 
 
@@ -52,9 +52,11 @@ first() {
 
     # Copia os arquivos
         cp /home/scripts/docs/firewall /usr/local/sbin/firewall
+        chmod +x /usr/local/sbin/firewall
         echo -e "${vermelho}Arquivo [firewall] copiado.${reset}"
 
         cp /home/scripts/docs/sqd /usr/local/sbin/sqd
+        chmod +x /usr/local/sbin/sqd
         echo -e "${vermelho}Arquivo [sqd] copiado.${reset}"
 
         cp /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED.bk
@@ -65,7 +67,7 @@ first() {
         echo -e "${vermelho}Arquivo [squid.conf] copiado.${reset}"
 
         cp /home/scripts/docs/files /etc/squid/
-        echo -e "${vermelho}Pasta [files] copiado.${reset}"
+        echo -e "${vermelho}Pasta [files] copiada.${reset}"
 
 
     # Cria a pasta cache do squid
@@ -89,7 +91,7 @@ first() {
 
 
     # Reinicia o sistema
-        echo -e "${vermelho}O sistema será reinicializado.${reset}"
+        echo -e "${vermelho}O sistema sera reinicializado.${reset}"
         sleep 5
         reboot
 }
@@ -98,7 +100,7 @@ script_path=$(readlink -f "$0")
 script_dir=$(dirname "$script_path")
 # Verifica se o diretório do script é /home/scripts.
 if [ "$script_dir" != "/home/scripts" ]; then
-  echo -e "${vermelho}Este script precisa ser executado no diretório /home/scripts.${reset}"
+  echo -e "${vermelho}Este script precisa ser executado no diretorio /home/scripts.${reset}"
   exit 1
 fi
 
