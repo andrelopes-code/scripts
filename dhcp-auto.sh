@@ -23,7 +23,7 @@ first() {
     echo -e "${vermelho}Atualizando o sistema...${reset}"
     sudo apt update && sudo apt upgrade -y
     echo -e "${vermelho}Sistema atualizado.${reset}"
-    sudo apt install isc-dhcp-server
+    sudo apt install isc-dhcp-server -y
     echo -e "${vermelho}Dependencias instaladas.${reset}"
 
 
@@ -60,7 +60,6 @@ second() {
     sleep 40
     sudo crontab -l | grep -v "@reboot $(realpath "$0") second" | crontab -
     echo -e "${vermelho}Crontab removido.${reset}"
-    mkdir /home/andrelps/passouaqui
 
     # Configurar o dhcpd.conf
     {
