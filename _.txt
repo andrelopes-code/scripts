@@ -1,0 +1,1 @@
+verificar se esta na pasta /home/scripts
