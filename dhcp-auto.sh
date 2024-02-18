@@ -33,7 +33,7 @@ first() {
     echo -e "${vermelho}HOSTNAME alterado.${reset}"
 
     # Modifica o arquivo hosts
-    sudo sed -i "s/127\.0\.1\.1\t.*/127.0.1.1\t${HOSTNAME}\n${IP_ADDRESS}\t${HOSTNAME}.${DOMAIN}\t${HOSTNAME}" /etc/hosts
+    sudo sed -i "s/127\.0\.1\.1\t.*/127.0.1.1\t${HOSTNAME}\n${IP_ADDRESS}\t${HOSTNAME}.${DOMAIN}\t${HOSTNAME}/" /etc/hosts
     echo -e "${vermelho}Arquivo HOSTS alterado.${reset}"
 
     # Configura a interface de rede
@@ -55,6 +55,7 @@ first() {
 }
 
 second() {
+    # Verifica se o usuário logou
     while true; do
     if tail -n 1 /var/log/auth.log | grep -q "New session"; then
         break
