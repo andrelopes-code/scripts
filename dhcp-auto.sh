@@ -33,8 +33,7 @@ first() {
     echo -e "${vermelho}HOSTNAME alterado.${reset}"
 
     # Modifica o arquivo hosts
-    sudo sed -i "s/127\.0\.1\.1\t.*/\
-    127.0.1.1\t${HOSTNAME}\n${IP_ADDRESS}\t${HOSTNAME}.${DOMAIN}\t${HOSTNAME}" /etc/hosts
+    sudo sed -i "s/127\.0\.1\.1\t.*/127.0.1.1\t${HOSTNAME}\n${IP_ADDRESS}\t${HOSTNAME}.${DOMAIN}\t${HOSTNAME}" /etc/hosts
     echo -e "${vermelho}Arquivo HOSTS alterado.${reset}"
 
     # Configura a interface de rede
@@ -49,16 +48,22 @@ first() {
     echo -e "${vermelho}Arquivo INTERFACES alterado.${reset}"
 
     # Crontab e reinicia o sistema
-    echo "@reboot $(realpath "$0") second" | sudo crontab -
+    echo "@reboot $(realpath "$0") second >> /dev/tty 2>&1" | sudo crontab -
     echo -e "${vermelho}Crontab adicionado, reinicializando (TROQUE PARA REDE INTERNA)...${reset}"
     sleep 10
     reboot
 }
 
 second() {
+    while true; do
+    if grep -q "session opened" /var/log/auth.log; then
+        break
+    fi
+    sleep 10  # Espera 10 segundos antes de verificar novamente
+    done
+
     # Remove o crontab
-    sleep 40
-    sudo crontab -l | grep -v "@reboot $(realpath "$0") second" | crontab -
+    sudo crontab -l | grep -v "@reboot $(realpath "$0") second >> /dev/tty 2>&1" | crontab -
     echo -e "${vermelho}Crontab removido.${reset}"
 
     # Configurar o dhcpd.conf
