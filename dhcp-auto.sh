@@ -48,23 +48,23 @@ first() {
     echo -e "${vermelho}Arquivo INTERFACES alterado.${reset}"
 
     # Crontab e reinicia o sistema
-    echo "@reboot $(realpath "$0") second >> /dev/tty 2>&1" | sudo crontab -
-    echo -e "${vermelho}Crontab adicionado, reinicializando (TROQUE PARA REDE INTERNA)...${reset}"
-    sleep 10
+    echo "@reboot $(realpath "$0") second >> /dev/tty" | sudo crontab -
+    echo -e "${vermelho}Crontab adicionado,(TROQUE PARA REDE INTERNA)...${reset}"
+    read -n1 -s
     reboot
 }
 
 second() {
     # Verifica se o usuário logou
     while true; do
-    if tail -n 1 /var/log/auth.log | grep -q "New session"; then
+    if tail -n 2 /var/log/auth.log | grep -q "New session"; then
         break
     fi
     sleep 1  
     done
 
     # Remove o crontab
-    sudo crontab -l | grep -v "@reboot $(realpath "$0") second >> /dev/tty 2>&1" | crontab -
+    sudo crontab -l | grep -v "@reboot $(realpath "$0") second >> /dev/tty" | crontab -
     echo -e "${vermelho}Crontab removido.${reset}"
 
     # Configurar o dhcpd.conf
