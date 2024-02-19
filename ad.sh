@@ -41,7 +41,7 @@ first() {
     expect \"Servidor administrativo para seu realm Kerberos:\"
     send \"${HOSTNAME}.${DOMAINUP}\r\"
     expect eof
-    "
+    " > /dev/null
 
   echo -e "${GREEN}Dependencias instaladas.${RESET}"
 
@@ -73,7 +73,8 @@ first() {
     dns-nameservers ${NAMESERVERS}\n\
     dns-domain ${DOMAIN}\n\
     dns-search ${DOMAIN}" -e '11,$d' /etc/network/interfaces
-    ifdown $INTERFACE_INTERNA && ifup $INTERFACE_INTERNA
+    ifdown $INTERFACE_INTERNA > /dev/null
+    ifup $INTERFACE_INTERNA > /dev/null
   echo -e "${GREEN}Arquivo INTERFACES alterado.${RESET}"
 
 
@@ -83,8 +84,8 @@ first() {
 
 
   # Parar servicos necessarios
-  systemctl stop smbd nmbd winbind systemd_resolved
-  systemctl disable smbd nmbd winbind systemd_resolved
+  systemctl stop smbd nmbd winbind systemd_resolved > /dev/null
+  systemctl disable smbd nmbd winbind systemd_resolved > /dev/null
   echo -e "${RED}Servicos [smbd nmbd winbind systemd_resolved] parados.${RESET}"
 
   # Provisionando o dominio
@@ -100,6 +101,9 @@ first() {
 	systemctl start samba-ad-dc > /dev/null
 	systemctl enable samba-ad-dc > /dev/null
   echo -e "${GREEN}samba-ad-dc ativado.${RESET}"
+  echo -e "${RED}Reiniciando sistema...${RESET}"
+  sleep 5
+  reboot
 }
 
 
