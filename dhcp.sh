@@ -6,18 +6,17 @@ RESET='\033[0m'
 
 # CONSTANTES
 INTERFACE_INTERNA="enp0s3"
-INTERFACE_EXTERNA=""
 HOSTNAME="srv-dhcp"
-DOMAIN="dreconet.io"
-IP_ADDRESS="192.168.0.252"
+DOMAIN="magalu.local"
+IP_ADDRESS="192.168.15.252"
 NETMASK="255.255.255.0"
-GATEWAY="192.168.0.254"
-BROADCAST="192.168.0.255"
-NETWORK="192.168.0.0"
+GATEWAY="192.168.15.254"
+BROADCAST="192.168.15.255"
+NETWORK="192.168.15.0"
 
 # CONSTANTES DHCP
-RANGE="192.168.0.20 192.168.0.230"
-NAMESERVERS="192.168.0.253, 192.168.15.1, 8.8.8.8, 1.1.1.1"
+RANGE="192.168.15.20 192.168.15.230"
+NAMESERVERS="192.168.15.253, 192.168.3.254, 8.8.8.8, 1.1.1.1"
 
 
 first() {
@@ -87,7 +86,7 @@ first() {
 # MAIN
 script_path=$(readlink -f "$0")
 script_dir=$(dirname "$script_path")
-# Verifica se o diretório do script é /home/scripts.
+
 if [ "$script_dir" != "/home/scripts" ]; then
   echo -e "${RED}Este script precisa ser executado no diretorio /home/scripts.${RESET}"
   exit 1
