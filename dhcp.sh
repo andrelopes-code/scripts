@@ -1,6 +1,8 @@
 #!/bin/bash
-vermelho="\033[0;31m"
-reset="\033[0m"
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+RESET='\033[0m'
 
 # CONSTANTES
 INTERFACE_INTERNA="enp0s3"
@@ -20,26 +22,26 @@ NAMESERVERS="192.168.0.253, 192.168.15.1, 8.8.8.8, 1.1.1.1"
 
 first() {
     # Atualiza o sistema
-        echo -e "${vermelho}Atualizando o sistema...${reset}"
-        sudo apt update > /dev/null && sudo apt upgrade -y > /dev/null
-        echo -e "${vermelho}Sistema atualizado.${reset}"
-        sudo apt install isc-dhcp-server -y > /dev/null
-        echo -e "${vermelho}Dependencias instaladas.${reset}"
+        echo -e "${RED}Atualizando o sistema...${RESET}"
+        apt update > /dev/null && apt upgrade -y > /dev/null
+        echo -e "${RED}Sistema atualizado.${RESET}"
+        apt install isc-dhcp-server -y > /dev/null
+        echo -e "${RED}Dependencias instaladas.${RESET}"
 
 
     # Modifica o arquivo hosts
-        sudo sed -i "s/127\.0\.1\.1\t.*/127.0.1.1\t${HOSTNAME}\n${IP_ADDRESS}\t${HOSTNAME}.${DOMAIN}\t${HOSTNAME}/" /etc/hosts
-        echo -e "${vermelho}Arquivo HOSTS alterado.${reset}"
+        sed -i "s/127\.0\.1\.1\t.*/127.0.1.1\t${HOSTNAME}\n${IP_ADDRESS}\t${HOSTNAME}.${DOMAIN}\t${HOSTNAME}/" /etc/hosts
+        echo -e "${RED}Arquivo HOSTS alterado.${RESET}"
 
 
     # Altera o hostname
-        sudo sed -i "s/.*/${HOSTNAME}/" /etc/hostname
-        sudo hostname -F /etc/hostname
-        echo -e "${vermelho}HOSTNAME alterado.${reset}"
+        sed -i "s/.*/${HOSTNAME}/" /etc/hostname
+        hostname -F /etc/hostname
+        echo -e "${RED}HOSTNAME alterado.${RESET}"
 
 
     # Configura a interface de rede
-        sudo sed -i -e "10a \
+        sed -i -e "10a \
         auto ${INTERFACE_INTERNA}\n\
         iface ${INTERFACE_INTERNA} inet static\n\
         address ${IP_ADDRESS}\n\
@@ -47,7 +49,7 @@ first() {
         gateway ${GATEWAY}\n\
         network ${NETWORK}\n\
         broadcast ${BROADCAST}\n" -e '11,$d' /etc/network/interfaces
-        echo -e "${vermelho}Arquivo INTERFACES alterado.${reset}"
+        echo -e "${RED}Arquivo INTERFACES alterado.${RESET}"
 
 
     # Configurar o dhcpd.conf
@@ -65,18 +67,18 @@ first() {
             echo "    max-lease-time 7200;"
             echo "}"
         } >> /etc/dhcp/dhcpd.conf
-        echo -e "${vermelho}dhcpd.conf configurado.${reset}"
+        echo -e "${RED}dhcpd.conf configurado.${RESET}"
 
 
     # Configura o arquivo default/isc-dhcp-server
-        sudo sed -i "s/INTERFACES=\"\"/INTERFACES=\"${INTERFACE_INTERNA}\"/" /etc/default/isc-dhcp-server
-        echo -e "${vermelho}default/isc-dhcp-server configurado.${reset}"
+        sed -i "s/INTERFACES=\"\"/INTERFACES=\"${INTERFACE_INTERNA}\"/" /etc/default/isc-dhcp-server
+        echo -e "${RED}default/isc-dhcp-server configurado.${RESET}"
 
 
     # Reinicia o sistema
-        echo -e "${vermelho}TROQUE PARA REDE INTERNA e pressione enter...${reset}"
+        echo -e "${RED}TROQUE PARA REDE INTERNA e pressione enter...${RESET}"
         read -n1 -s
-        echo -e "${vermelho}O sistema sera reinicializado.${reset}"
+        echo -e "${RED}O sistema sera reinicializado.${RESET}"
         sleep 5
         reboot
 }
@@ -87,13 +89,13 @@ script_path=$(readlink -f "$0")
 script_dir=$(dirname "$script_path")
 # Verifica se o diretório do script é /home/scripts.
 if [ "$script_dir" != "/home/scripts" ]; then
-  echo -e "${vermelho}Este script precisa ser executado no diretorio /home/scripts.${reset}"
+  echo -e "${RED}Este script precisa ser executado no diretorio /home/scripts.${RESET}"
   exit 1
 fi
 
 # Verifica se foi executado com root
 if [ $UID != 0 ]; then
-  echo -e "${vermelho}Este script precisa ser executado como root.${reset}"
+  echo -e "${RED}Este script precisa ser executado como root.${RESET}"
   exit 1
 fi
 

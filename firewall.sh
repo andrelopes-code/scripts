@@ -1,6 +1,8 @@
 #!/bin/bash
-vermelho="\033[0;31m"
-reset="\033[0m"
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+RESET='\033[0m'
 
 # CONSTANTES
 INTERFACE_INTERNA="enp0s8"
@@ -16,26 +18,26 @@ NETWORK="192.168.0.0"
 
 first() {
     # Atualiza o sistema
-        echo -e "${vermelho}Atualizando o sistema...${reset}"
-        sudo apt update && sudo apt upgrade -y > /dev/null
-        echo -e "${vermelho}Sistema atualizado.${reset}"
-        sudo apt install squid apache2 sarg -y > /dev/null
-        echo -e "${vermelho}Dependencias instaladas.${reset}"
+        echo -e "${RED}Atualizando o sistema...${RESET}"
+        apt update && apt upgrade -y > /dev/null
+        echo -e "${RED}Sistema atualizado.${RESET}"
+        apt install squid apache2 sarg -y > /dev/null
+        echo -e "${RED}Dependencias instaladas.${RESET}"
 
 
     # Modifica o arquivo hosts
-        sudo sed -i "s/127\.0\.1\.1\t.*/127.0.1.1\t${HOSTNAME}\n${IP_ADDRESS}\t${HOSTNAME}.${DOMAIN}\t${HOSTNAME}/" /etc/hosts
-        echo -e "${vermelho}Arquivo HOSTS alterado.${reset}"
+        sed -i "s/127\.0\.1\.1\t.*/127.0.1.1\t${HOSTNAME}\n${IP_ADDRESS}\t${HOSTNAME}.${DOMAIN}\t${HOSTNAME}/" /etc/hosts
+        echo -e "${RED}Arquivo HOSTS alterado.${RESET}"
 
 
     # Altera o hostname
-        sudo sed -i "s/.*/${HOSTNAME}/" /etc/hostname
-        sudo hostname -F /etc/hostname
-        echo -e "${vermelho}HOSTNAME alterado.${reset}"
+        sed -i "s/.*/${HOSTNAME}/" /etc/hostname
+        hostname -F /etc/hostname
+        echo -e "${RED}HOSTNAME alterado.${RESET}"
 
 
     # Configura a interface de rede
-        sudo sed -i -e "10a \
+        sed -i -e "10a \
         # Interface Externa\n\
         auto ${INTERFACE_EXTERNA}\n\
         iface ${INTERFACE_EXTERNA} inet dhcp\n\
@@ -47,51 +49,51 @@ first() {
         netmask ${NETMASK}\n\
         network ${NETWORK}\n\
         broadcast ${BROADCAST}\n" -e '11,$d' /etc/network/interfaces
-        echo -e "${vermelho}Arquivo INTERFACES alterado.${reset}"
+        echo -e "${RED}Arquivo INTERFACES alterado.${RESET}"
 
 
     # Copia os arquivos
         cp /home/scripts/docs/firewall /usr/local/sbin/firewall
         chmod +x /usr/local/sbin/firewall
-        echo -e "${vermelho}Arquivo [firewall] copiado.${reset}"
+        echo -e "${RED}Arquivo [firewall] copiado.${RESET}"
 
         cp /home/scripts/docs/sqd /usr/local/sbin/sqd
         chmod +x /usr/local/sbin/sqd
-        echo -e "${vermelho}Arquivo [sqd] copiado.${reset}"
+        echo -e "${RED}Arquivo [sqd] copiado.${RESET}"
 
         cp /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED.bk
         cp /home/scripts/docs/HTML.html /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED
-        echo -e "${vermelho}Arquivo [ERR_ACCESS_DENIED] copiado.${reset}"
+        echo -e "${RED}Arquivo [ERR_ACCESS_DENIED] copiado.${RESET}"
 
         cp /home/scripts/docs/squid.conf /etc/squid/squid.conf
-        echo -e "${vermelho}Arquivo [squid.conf] copiado.${reset}"
+        echo -e "${RED}Arquivo [squid.conf] copiado.${RESET}"
 
         cp -r /home/scripts/docs/files /etc/squid
-        echo -e "${vermelho}Pasta [files] copiada.${reset}"
+        echo -e "${RED}Pasta [files] copiada.${RESET}"
 
 
     # Cria a pasta cache do squid
         mkdir /etc/squid/cache
         chmod 777 /etc/squid/cache
-        sudo squid -z > /dev/null
-        echo -e "${vermelho}Pasta [cache] criada.${reset}"
+        squid -z > /dev/null
+        echo -e "${RED}Pasta [cache] criada.${RESET}"
 
 
     # Arquivo de inicialização do Firewall
         cp /home/scripts/docs/firewall.service /lib/systemd/system/firewall.service
         systemctl daemon-reload
         systemctl enable firewall.service
-        echo -e "${vermelho}Criado serviço para o firewall.${reset}"
+        echo -e "${RED}Criado serviço para o firewall.${RESET}"
 
 
     # Modifica o SARG
         mv /etc/sarg/sarg.conf /etc/sarg/sarg.conf.bk
         cp /home/scripts/docs/sarg.conf /etc/sarg/sarg.conf
-        echo -e "${vermelho}Editado o arquivo [sarg.conf].${reset}"
+        echo -e "${RED}Editado o arquivo [sarg.conf].${RESET}"
 
 
     # Reinicia o sistema
-        echo -e "${vermelho}O sistema sera reinicializado.${reset}"
+        echo -e "${RED}O sistema sera reinicializado.${RESET}"
         sleep 5
         reboot
 }
@@ -102,13 +104,13 @@ script_path=$(readlink -f "$0")
 script_dir=$(dirname "$script_path")
 # Verifica se o diretório do script é /home/scripts.
 if [ "$script_dir" != "/home/scripts" ]; then
-  echo -e "${vermelho}Este script precisa ser executado no diretorio /home/scripts.${reset}"
+  echo -e "${RED}Este script precisa ser executado no diretorio /home/scripts.${RESET}"
   exit 1
 fi
 
 # Verifica se foi executado com root
 if [ $UID != 0 ]; then
-  echo -e "${vermelho}Este script precisa ser executado como root.${reset}"
+  echo -e "${RED}Este script precisa ser executado como root.${RESET}"
   exit 1
 fi
 
