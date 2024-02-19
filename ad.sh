@@ -59,11 +59,6 @@ first() {
 
   # Configura a interface de rede
     sed -i -e "10a \
-    # Interface Externa\n\
-    auto ${INTERFACE_EXTERNA}\n\
-    iface ${INTERFACE_EXTERNA} inet dhcp\n\
-    \n\
-    # Interface Interna\n\
     auto ${INTERFACE_INTERNA}\n\
     iface ${INTERFACE_INTERNA} inet static\n\
     address ${IP_ADDRESS}\n\
