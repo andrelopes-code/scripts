@@ -92,7 +92,6 @@ if [ "$script_dir" != "/home/scripts" ]; then
   exit 1
 fi
 
-# Verifica se foi executado com root
 if [ $UID != 0 ]; then
   echo -e "${RED}Este script precisa ser executado como root.${RESET}"
   exit 1

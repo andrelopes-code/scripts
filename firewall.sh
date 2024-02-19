@@ -102,13 +102,12 @@ first() {
 # MAIN
 script_path=$(readlink -f "$0")
 script_dir=$(dirname "$script_path")
-# Verifica se o diretório do script é /home/scripts.
+
 if [ "$script_dir" != "/home/scripts" ]; then
   echo -e "${RED}Este script precisa ser executado no diretorio /home/scripts.${RESET}"
   exit 1
 fi
 
-# Verifica se foi executado com root
 if [ $UID != 0 ]; then
   echo -e "${RED}Este script precisa ser executado como root.${RESET}"
   exit 1
