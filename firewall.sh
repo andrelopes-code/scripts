@@ -15,6 +15,8 @@ GATEWAY="192.168.15.254"
 BROADCAST="192.168.15.255"
 NETWORK="192.168.15.0"
 
+#------------------------------------------------------------------------------#
+
 verificacao_inicial() {
     script_path=$(readlink -f "$0")
     script_dir=$(dirname "$script_path")
@@ -115,6 +117,8 @@ modificar_sarg() {
 
 reiniciar_sistema() {
     # Reinicia o sistema
+    echo -e "${RED}pressione qualquer tecla...${RESET}"
+    read -n1 -s
     echo -e "${RED}O sistema sera reinicializado.${RESET}"
     sleep 5
     reboot
