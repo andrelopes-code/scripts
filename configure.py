@@ -54,7 +54,7 @@ def ad_dhcp_change() -> None:
 
 def files_change() -> None:
     # firewall
-    subprocess.run(('sed', '-i', 's/localnet==\".*\"/localnet==\"{}\"/'.format(NEW_NETWORK+'\/24'), '/home/scripts/docs/firewall'))
+    subprocess.run(('sed', '-i', 's/localnet=\".*\"/localnet=\"{}\"/'.format(NEW_NETWORK+'\/24'), '/home/scripts/docs/firewall'))
     subprocess.run(('sed', '-i', 's/ifaceIn=\".*\"/ifaceIn=\"{}\"/'.format(NEW_INTERFACE_INTERNA), '/home/scripts/docs/firewall'))
     subprocess.run(('sed', '-i', 's/ifaceEx=\".*\"/ifaceEx=\"{}\"/'.format(NEW_INTERFACE_EXTERNA), '/home/scripts/docs/firewall'))
     # squid.conf
