@@ -32,7 +32,7 @@ NEW_NAMESERVERS = input('Nameservers [ns1, ns2, ns3]: ').strip()
 def general_change() -> None:
     subprocess.run(('sed', '-i', 's/INTERFACE_INTERNA=\".*\"/INTERFACE_INTERNA=\"{}\"/'.format(NEW_INTERFACE_INTERNA), *allshfiles))
     subprocess.run(('sed', '-i', 's/INTERFACE_EXTERNA=\".*\"/INTERFACE_EXTERNA=\"{}\"/'.format(NEW_INTERFACE_EXTERNA), *allshfiles))
-    subprocess.run(('sed', '-i', 's/DOMAIN=\"*\"/DOMAIN=\"{}\"/'.format(NEW_DOMAIN), *allshfiles))
+    subprocess.run(('sed', '-i', 's/DOMAIN=\".*\"/DOMAIN=\"{}\"/'.format(NEW_DOMAIN), *allshfiles))
     subprocess.run(('sed', '-i', 's/NETMASK=\".*\"/NETMASK=\"{}\"/'.format(NEW_NETMASK), *allshfiles))
     subprocess.run(('sed', '-i', 's/GATEWAY=\".*\"/GATEWAY=\"{}\"/'.format(NEW_GATEWAY), *allshfiles))
     subprocess.run(('sed', '-i', 's/BROADCAST=\".*\"/BROADCAST=\"{}\"/'.format(NEW_BROADCAST), *allshfiles))
@@ -53,12 +53,12 @@ def ad_dhcp_change() -> None:
 
 def files_change() -> None:
     # firewall
-    subprocess.run(('sed', '-i', 's/localnet==\".*\"/localnet==\"{}\"/'.format(NEW_NETWORK+'/24'), '/home/scripts/docs/firewall'))
+    subprocess.run(('sed', '-i', 's/localnet==\".*\"/localnet==\"{}\"/'.format(NEW_NETWORK+'\/24'), '/home/scripts/docs/firewall'))
     subprocess.run(('sed', '-i', 's/ifaceIn=\".*\"/ifaceIn=\"{}\"/'.format(NEW_INTERFACE_INTERNA), '/home/scripts/docs/firewall'))
     subprocess.run(('sed', '-i', 's/ifaceEx=\".*\"/ifaceEx=\"{}\"/'.format(NEW_INTERFACE_EXTERNA), '/home/scripts/docs/firewall'))
     # squid.conf
     subprocess.run(('sed', '-i', 's/acl sarg dst .*/acl sarg dst {}/'.format(IP_FIREWALL), '/home/scripts/docs/squid.conf'))
-    subprocess.run(('sed', '-i', 's/acl localnet src .*/acl localnet src {}/'.format(NEW_NETWORK+'/24'), '/home/scripts/docs/squid.conf'))
+    subprocess.run(('sed', '-i', 's/acl localnet src .*/acl localnet src {}/'.format(NEW_NETWORK+'\/24'), '/home/scripts/docs/squid.conf'))
     subprocess.run(('sed', '-i', 's/http_port .*:3128/http_port {}:3128/'.format(IP_FIREWALL), '/home/scripts/docs/squid.conf'))
 
 
@@ -67,3 +67,6 @@ if __name__ == "__main__":
     firewall_change()
     ad_dhcp_change()
     files_change()
+    
+    
+    
