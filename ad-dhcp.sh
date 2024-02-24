@@ -4,7 +4,7 @@ GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
 RESET='\033[0m'
 
-INTERFACE_INTERNA="enp0s3"
+INTERFACE_EXTERNA="enp0s3"
 HOSTNAME="srv-ad"
 DOMAIN="magalu.local"
 DOMAINUP="MAGALU.LOCAL"
@@ -13,7 +13,6 @@ NETMASK="255.255.255.0"
 GATEWAY="192.168.15.254"
 BROADCAST="192.168.15.255"
 NETWORK="192.168.15.0"
-NAMESERVERS="${IP_ADDRESS} 192.168.3.254 8.8.8.8 1.1.1.1"
 
 RANGE="192.168.15.20 192.168.15.230"
 NAMESERVERS="192.168.15.253, 192.168.3.254, 8.8.8.8, 1.1.1.1"
@@ -81,8 +80,8 @@ alterar_hostname() {
 configurar_interface_de_rede() {
   # Configura a interface de rede
   sed -i -e "10a \
-  auto ${INTERFACE_INTERNA}\n\
-  iface ${INTERFACE_INTERNA} inet static\n\
+  auto ${INTERFACE_EXTERNA}\n\
+  iface ${INTERFACE_EXTERNA} inet static\n\
   address ${IP_ADDRESS}\n\
   netmask ${NETMASK}\n\
   network ${NETWORK}\n\
@@ -90,8 +89,8 @@ configurar_interface_de_rede() {
   dns-nameservers ${NAMESERVERS}\n\
   dns-domain ${DOMAIN}\n\
   dns-search ${DOMAIN}" -e '11,$d' /etc/network/interfaces
-  ifdown $INTERFACE_INTERNA > /dev/null
-  ifup $INTERFACE_INTERNA > /dev/null
+  ifdown $INTERFACE_EXTERNA > /dev/null
+  ifup $INTERFACE_EXTERNA > /dev/null
   echo -e "${GREEN}Arquivo INTERFACES alterado.${RESET}"
 }
 
@@ -145,7 +144,7 @@ configurar_dhcp() {
 
 configurar_default() {
     # Configura o arquivo default/isc-dhcp-server
-    sed -i "s/INTERFACES=\"\"/INTERFACES=\"${INTERFACE_INTERNA}\"/" /etc/default/isc-dhcp-server
+    sed -i "s/INTERFACES=\"\"/INTERFACES=\"${INTERFACE_EXTERNA}\"/" /etc/default/isc-dhcp-server
     echo -e "${RED}default/isc-dhcp-server configurado.${RESET}"
 }
 

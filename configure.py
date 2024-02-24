@@ -8,7 +8,7 @@ allshfiles = (ad_dhcp, firewall)
 
 print("\033[1;33mEscolha os valores com atencao!")
 # Definindo variaveis Gerais
-print("\033[1;35mConfigurações GERAIS:\033[1;32m")
+print("\033[1;35mConfiguracoes GERAIS:\033[1;32m")
 NEW_INTERFACE_INTERNA = input('interface interna: ').strip()
 NEW_INTERFACE_EXTERNA = input('interface externa: ').strip()
 NEW_DOMAIN = input('dominio: ').strip()
@@ -18,11 +18,11 @@ NEW_NETMASK = input('mascara: ').strip()
 NEW_GATEWAY = input('gateway: ').strip()
 NEW_BROADCAST = input('broadcast: ').strip()
 # Definindo variaveis do Firewall
-print("\033[1;35mConfigurações FIREWALL:\033[1;32m")
+print("\033[1;35mConfiguracoes FIREWALL:\033[1;32m")
 IP_FIREWALL = input('IP: ').strip()
 HOSTNAME_FIREWALL = input('hostname: ').strip()
 # Definindo variaveis do AD-DHCP
-print("\033[1;35mConfigurações AD-DHCP:\033[1;32m")
+print("\033[1;35mConfiguracoes AD-DHCP:\033[1;32m")
 IP_AD = input('IP: ').strip()
 HOSTNAME_AD = input('hostname: ').strip()
 NEW_RANGE = input('Range [x.x.x.x x.x.x.x]: ').strip()
