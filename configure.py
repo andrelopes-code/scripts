@@ -47,6 +47,7 @@ def firewall_change() -> None:
 def ad_dhcp_change() -> None:
     subprocess.run(('sed', '-i', 's/IP_ADDRESS=\".*\"/IP_ADDRESS=\"{}\"/'.format(IP_AD), ad_dhcp))
     subprocess.run(('sed', '-i', 's/HOSTNAME=\".*\"/HOSTNAME=\"{}\"/'.format(HOSTNAME_AD), ad_dhcp))
+    subprocess.run(('sed', '-i', 's/DOMAINUP=\".*\"/DOMAINUP=\"{}\"/'.format(DOMAINUP), ad_dhcp))
     subprocess.run(('sed', '-i', 's/RANGE=\".*\"/RANGE=\"{}\"/'.format(NEW_RANGE), ad_dhcp))
     subprocess.run(('sed', '-i', 's/NAMESERVERS=\".*\"/NAMESERVERS=\"{}\"/'.format(NEW_NAMESERVERS), ad_dhcp))
 
