@@ -6,16 +6,17 @@ RESET='\033[0m'
 
 INTERFACE_EXTERNA="enp0s3"
 HOSTNAME="srv-ad"
-DOMAIN="magalu.local"
-DOMAINUP="MAGALU.LOCAL"
-IP_ADDRESS="192.168.15.253"
+DOMAIN="bacalhau.local"
+DOMAINUP="BACALHAU.LOCAL"
+IP_ADDRESS="192.168.1.253"
 NETMASK="255.255.255.0"
-GATEWAY="192.168.15.254"
-BROADCAST="192.168.15.255"
-NETWORK="192.168.15.0"
+GATEWAY="192.168.1.254"
+BROADCAST="192.168.1.255"
+NETWORK="192.168.1.0"
 
-RANGE="192.168.15.20 192.168.15.230"
-NAMESERVERS="192.168.15.253, 192.168.3.254, 8.8.8.8, 1.1.1.1"
+RANGE="192.168.1.20 192.168.1.230"
+NAMESERVERS="192.168.1.253, 8.8.8.8, 1.1.1.1"
+DNS_NAMESERVERS="192.168.1.253 8.8.8.8 1.1.1.1"
 
 #------------------------------------------------------------------------------#
 
@@ -50,17 +51,18 @@ instalar_dependencias() {
   apt install samba samba-common smbclient cifs-utils samba-vfs-modules samba-testsuite samba-dbg samba-dsdb-modules cups cups-common cups-core-drivers nmap winbind smbclient libnss-winbind libpam-winbind -y > /dev/null
 
   # Instalando kerberos
-  apt install expect -y > /dev/null
-  expect -c "
-  spawn apt install krb5-user krb5-config -y
-  expect \"Reino por omissão do Kerberos versão 5:\"
-  send \"${DOMAINUP}\r\"
-  expect \"Servidores Kerberos para seu realm:\"
-  send \"${HOSTNAME}.${DOMAIN}\r\"
-  expect \"Servidor administrativo para seu realm Kerberos:\"
-  send \"${HOSTNAME}.${DOMAINUP}\r\"
-  expect eof
-  " > /dev/null
+  apt install krb5-user krb5-config
+  # apt install expect -y > /dev/null
+  # expect -c "
+  # spawn apt install krb5-user krb5-config -y
+  # expect \"Reino por omissão do Kerberos versão 5:\"
+  # send \"${DOMAINUP}\r\"
+  # expect \"Servidores Kerberos para seu realm:\"
+  # send \"${HOSTNAME}.${DOMAIN}\r\"
+  # expect \"Servidor administrativo para seu realm Kerberos:\"
+  # send \"${HOSTNAME}.${DOMAINUP}\r\"
+  # expect eof
+  # " > /dev/null
   echo -e "${GREEN}Dependencias instaladas.${RESET}"
 }
 
@@ -86,11 +88,9 @@ configurar_interface_de_rede() {
   netmask ${NETMASK}\n\
   network ${NETWORK}\n\
   broadcast ${BROADCAST}\n\
-  dns-nameservers ${NAMESERVERS}\n\
+  dns-nameservers ${DNS_NAMESERVERS}\n\
   dns-domain ${DOMAIN}\n\
   dns-search ${DOMAIN}" -e '11,$d' /etc/network/interfaces
-  ifdown $INTERFACE_EXTERNA > /dev/null
-  ifup $INTERFACE_EXTERNA > /dev/null
   echo -e "${GREEN}Arquivo INTERFACES alterado.${RESET}"
 }
 

@@ -8,12 +8,12 @@ RESET='\033[0m'
 INTERFACE_INTERNA="enp0s8"
 INTERFACE_EXTERNA="enp0s3"
 HOSTNAME="srv-fw"
-DOMAIN="magalu.local"
-IP_ADDRESS="192.168.15.254"
+DOMAIN="bacalhau.local"
+IP_ADDRESS="192.168.1.254"
 NETMASK="255.255.255.0"
-GATEWAY="192.168.15.254"
-BROADCAST="192.168.15.255"
-NETWORK="192.168.15.0"
+GATEWAY="192.168.1.254"
+BROADCAST="192.168.1.255"
+NETWORK="192.168.1.0"
 
 #------------------------------------------------------------------------------#
 
