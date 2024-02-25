@@ -7,14 +7,14 @@ RESET='\033[0m'
 # VARIAVEIS
 INTERFACE_INTERNA="enp0s3"
 HOSTNAME="srv-ad"
-DOMAIN="magalu.local"
-DOMAINUP="MAGALU.LOCAL"
-IP_ADDRESS="192.168.15.253"
+DOMAIN="bacalhau.local"
+DOMAINUP="BACALHAU.LOCAL"
+IP_ADDRESS="192.168.1.253"
 NETMASK="255.255.255.0"
-GATEWAY="192.168.15.254"
-BROADCAST="192.168.15.255"
-NETWORK="192.168.15.0"
-NAMESERVERS="${IP_ADDRESS} 192.168.3.254 8.8.8.8 1.1.1.1"
+GATEWAY="192.168.1.254"
+BROADCAST="192.168.1.255"
+NETWORK="192.168.1.0"
+NAMESERVERS="${IP_ADDRESS} 8.8.8.8 1.1.1.1"
 
 verificacao_inicial() {
   script_path=$(readlink -f "$0")
@@ -42,7 +42,7 @@ atualizar_sistema() {
 instalar_dependencias() {
   # Instalando dependencias
   echo -e "${YELLOW}Instalando dependencias..."
-  apt install build-essential libacl1-dev libattr1-dev libblkid-dev libgnutls-dev libreadline-dev python-dev libpam0g-dev python-dnspython gdb pkg-config libpopt-dev libldap2-dev dnsutils libbsd-dev docbook-xsl libcups2-dev nfs-kernel-server -y > /dev/null
+  apt install build-essential libacl1-dev libattr1-dev libblkid-dev libgnutls-dev libreadline-dev python-dev libpam0g-dev python-dnspython gdb pkg-config libpopt-dev libldap2-dev dnsutils libbsd-dev docbook-xsl libcups2-dev nfs-kernel-server isc-dhcp-server -y > /dev/null
 
   apt install samba samba-common smbclient cifs-utils samba-vfs-modules samba-testsuite samba-dbg samba-dsdb-modules cups cups-common cups-core-drivers nmap winbind smbclient libnss-winbind libpam-winbind -y > /dev/null
 

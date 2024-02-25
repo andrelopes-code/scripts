@@ -51,18 +51,17 @@ instalar_dependencias() {
   apt install samba samba-common smbclient cifs-utils samba-vfs-modules samba-testsuite samba-dbg samba-dsdb-modules cups cups-common cups-core-drivers nmap winbind smbclient libnss-winbind libpam-winbind -y > /dev/null
 
   # Instalando kerberos
-  apt install krb5-user krb5-config
-  # apt install expect -y > /dev/null
-  # expect -c "
-  # spawn apt install krb5-user krb5-config -y
-  # expect \"Reino por omissão do Kerberos versão 5:\"
-  # send \"${DOMAINUP}\r\"
-  # expect \"Servidores Kerberos para seu realm:\"
-  # send \"${HOSTNAME}.${DOMAIN}\r\"
-  # expect \"Servidor administrativo para seu realm Kerberos:\"
-  # send \"${HOSTNAME}.${DOMAINUP}\r\"
-  # expect eof
-  # " > /dev/null
+  apt install expect -y > /dev/null
+  expect -c "
+  spawn apt install krb5-user krb5-config -y
+  expect \"Reino por omissão do Kerberos versão 5:\"
+  send \"${DOMAINUP}\r\"
+  expect \"Servidores Kerberos para seu realm:\"
+  send \"${HOSTNAME}.${DOMAIN}\r\"
+  expect \"Servidor administrativo para seu realm Kerberos:\"
+  send \"${HOSTNAME}.${DOMAIN}\r\"
+  expect eof
+  " > /dev/null
   echo -e "${GREEN}Dependencias instaladas.${RESET}"
 }
 
