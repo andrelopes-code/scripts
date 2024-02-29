@@ -1,5 +1,4 @@
 #!/bin/bash
-
 case $1 in
 parse|test)squid -k parse;;
 p|permitidos)sudo vi /etc/squid/files/allowed;;

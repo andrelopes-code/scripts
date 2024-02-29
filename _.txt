@@ -1,6 +1,7 @@
-hive = LOCAL MACHINE
-path = SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
-nome = dontdisplaylastusername DWORD32
-val  = 1
+dontDisplayLastUsername
+    hive = LOCAL MACHINE
+    path = SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+    nome = dontdisplaylastusername DWORD32
+    val  = 1
 
 

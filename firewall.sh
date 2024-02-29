@@ -15,7 +15,6 @@ GATEWAY="192.168.1.254"
 BROADCAST="192.168.1.255"
 NETWORK="192.168.1.0"
 
-#------------------------------------------------------------------------------#
 
 verificacao_inicial() {
     script_path=$(readlink -f "$0")
@@ -82,7 +81,7 @@ copiar_arquivos() {
     echo -e "${RED}Arquivo [sqd] copiado.${RESET}"
 
     cp /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED.bk
-    cp /home/scripts/docs/HTML.html /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED
+    cp /home/scripts/docs/ERR_ACCESS_DENIED /usr/share/squid/errors/pt-br/ERR_ACCESS_DENIED
     echo -e "${RED}Arquivo [ERR_ACCESS_DENIED] copiado.${RESET}"
 
     cp /home/scripts/docs/squid.conf /etc/squid/squid.conf
