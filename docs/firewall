@@ -1,121 +1,112 @@
 #!/bin/bash
 
-# Parameters
-ifaceIn="enp0s8"
-ifaceEx="enp0s3"
-localnet="192.168.1.0/24"
-externet=0
-#===============================================================================================================#
+
+# Variaveis locais
+ifaceEx="enp0s3"            # Interface de rede externa
+ifaceIn="enp0s8"            # Interface de rede interna
+localnet="192.168.15.0/24"  # endereço da rede local                  
 
 
-local(){ 
+#==  Funcoes para definicao de regras =============================================================#
 
-    # Libera a comunicacao (I/O) do servidor com a rede local e com a internet:
-    	iptables -t filter -A INPUT -i $ifaceEx -p tcp -m multiport --sports 80,443 -j ACCEPT
-    	iptables -t filter -A INPUT -i $ifaceEx -p udp -m multiport --sports 53,123 -j ACCEPT
-    	iptables -t filter -A OUTPUT -o $ifaceEx -p tcp -m multiport --dports 80,443 -j ACCEPT
-    	iptables -t filter -A OUTPUT -o $ifaceEx -p udp -m multiport --dports 53,123 -j ACCEPT
 
-    # Libera o trafego da lo na rede:
-    	iptables -t filter -A INPUT -i lo -j ACCEPT
-    	iptables -t filter -A OUTPUT -o lo -j ACCEPT
+local(){ # Funcao para configuracao das regras de firewall para comunicacao local
 
-    # Libera o ping na rede local (protocolo icmp):
-    	iptables -t filter -A INPUT -i $ifaceEx -p icmp --icmp-type 8 -s 0/0 -j ACCEPT
-    	iptables -t filter -A OUTPUT -o $ifaceEx -p icmp --icmp-type 0 -d 0/0 -j ACCEPT
+    # Libera a comunicacao (I/O) do servidor com a rede local e com a internet
+    # Permite trafego TCP e UDP de entrada e saida nas portas
+    # 80, 443, 53, 123 (HTTP, HTTPS, DNS, NTP)
+    iptables -t filter -A INPUT -i $ifaceEx -p tcp -m multiport --sports 80,443 -j ACCEPT
+    iptables -t filter -A INPUT -i $ifaceEx -p udp -m multiport --sports 53,123 -j ACCEPT
+    iptables -t filter -A OUTPUT -o $ifaceEx -p tcp -m multiport --dports 80,443 -j ACCEPT
+    iptables -t filter -A OUTPUT -o $ifaceEx -p udp -m multiport --dports 53,123 -j ACCEPT
 
-    # Libera a porta do Squid:
-    	iptables -t filter -A INPUT -i $ifaceIn -p tcp --dport 3128 -j ACCEPT
-    	iptables -t filter -A OUTPUT -o $ifaceIn -p tcp --sport 3128 -j ACCEPT
+    # Libera todo o trafego da lo na rede
+    iptables -t filter -A INPUT -i lo -j ACCEPT
+    iptables -t filter -A OUTPUT -o lo -j ACCEPT
 
-    # Libera a porta do SSH:
-    	iptables -t filter -A INPUT -p tcp --dport 22 -j ACCEPT
-    	iptables -t filter -A OUTPUT -p tcp --sport 22 -j ACCEPT
+    # Libera o ping (ICMP) no localhost
+    iptables -t filter -A INPUT -i $ifaceEx -p icmp --icmp-type 0 -j ACCEPT
+    iptables -t filter -A INPUT -i $ifaceIn -p icmp --icmp-type 0 -j ACCEPT
+    iptables -t filter -A OUTPUT -o $ifaceEx -p icmp --icmp-type 8 -j ACCEPT
+    iptables -t filter -A OUTPUT -o $ifaceIn -p icmp --icmp-type 8 -j ACCEPT
 
-    # Libera as portas do Samba:
-    	iptables -t filter -A INPUT -p tcp -m multiport --dports 139,445 -j ACCEPT
-    	iptables -t filter -A OUTPUT -p tcp -m multiport --sports 139,445 -j ACCEPT
+    # Libera o trafego TCP do Squid (3128)
+    iptables -t filter -A INPUT -i $ifaceIn -p tcp --dport 3128 -j ACCEPT
+    iptables -t filter -A OUTPUT -o $ifaceIn -p tcp --sport 3128 -j ACCEPT
 
-    # Libera as portas do SPEEDTEST OOKLA:
-		iptables -t filter -A INPUT -p tcp --dport 5060 -m state --state NEW,ESTABLISHED -j ACCEPT        
-		iptables -t filter -A INPUT -p tcp --sport 5060 -m state --state NEW,ESTABLISHED -j ACCEPT        
-		iptables -t filter -A INPUT -p tcp --dport 8080 -m state --state NEW,ESTABLISHED -j ACCEPT        
-		iptables -t filter -A INPUT -p tcp --sport 8080 -m state --state NEW,ESTABLISHED -j ACCEPT 
+    # Libera trafego nas portas do Samba (139 e 445)
+    iptables -t filter -A INPUT -p tcp -m multiport --dports 139,445 -j ACCEPT
+    iptables -t filter -A OUTPUT -p tcp -m multiport --sports 139,445 -j ACCEPT
 }
 
 
-forward(){
+forward(){ # Funcao para encaminhamento de trafego entre WAN e LAN
 
-    # Libera o trafego entre WAN e LAN:
-    	iptables -t filter -A FORWARD -i $ifaceEx -p tcp -m multiport --sports 80,443 -d $localnet -j ACCEPT
-    	iptables -t filter -A FORWARD -i $ifaceEx -p udp -m multiport --sports 53,123 -d $localnet -j ACCEPT
-    	iptables -t filter -A FORWARD -i $ifaceIn -p tcp -m multiport --dports 80,443 -s $localnet -j ACCEPT
-    	iptables -t filter -A FORWARD -i $ifaceIn -p udp -m multiport --dports 53,123 -s $localnet -j ACCEPT
+    # Libera o trafego entre a INTERNET e a REDE LOCAL
+    iptables -t filter -A FORWARD -i $ifaceEx -p tcp -m multiport --sports 80,443 -d $localnet -j ACCEPT
+    iptables -t filter -A FORWARD -i $ifaceEx -p udp -m multiport --sports 53,123 -d $localnet -j ACCEPT
+    iptables -t filter -A FORWARD -i $ifaceIn -p tcp -m multiport --dports 80,443 -s $localnet -j ACCEPT
+    iptables -t filter -A FORWARD -i $ifaceIn -p udp -m multiport --dports 53,123 -s $localnet -j ACCEPT
 
-    # Libera as portas do SPEEDTEST OOKLA:
-		iptables -A FORWARD -p tcp --dport 8080 -m state --state NEW,ESTABLISHED -j ACCEPT
-		iptables -A FORWARD -p tcp --dport 5060 -m state --state NEW,ESTABLISHED -j ACCEPT
-		iptables -A FORWARD -p tcp --sport 8080 -m state --state NEW,ESTABLISHED -j ACCEPT
-		iptables -A FORWARD -p tcp --sport 5060 -m state --state NEW,ESTABLISHED -j ACCEPT
-
-    # Libera o ping entre a WAN e LAN:
-    	iptables -t filter -A FORWARD -i $ifaceIn -p icmp --icmp-type 8 -s $localnet -d 0/0 -j ACCEPT
-    	iptables -t filter -A FORWARD -o $ifaceIn -p icmp --icmp-type 0 -d $localnet -s 0/0 -j ACCEPT
+    # Libera o ping entre a INTERNET e a REDE LOCAL
+    iptables -t filter -A FORWARD -i $ifaceIn -p icmp --icmp-type 8 -s $localnet -j ACCEPT
+    iptables -t filter -A FORWARD -o $ifaceIn -p icmp --icmp-type 0 -d $localnet -j ACCEPT
+    iptables -t filter -A FORWARD -i $ifaceEx -p icmp --icmp-type 0 -d $localnet -j ACCEPT
+    iptables -t filter -A FORWARD -o $ifaceEx -p icmp --icmp-type 8 -s $localnet -j ACCEPT
 }
 
 
-internet(){
+internet(){ # Funcao para habilitar o compartilhamento da internet entre as redes
 
-    # Habilita o compartilhamento da internet entre as redes:
-    	sysctl -w net.ipv4.ip_forward=1
-    	iptables -t nat -A POSTROUTING -s $localnet -o $ifaceEx -j MASQUERADE
+    # Habilita o encaminhamento de IP
+    sysctl -w net.ipv4.ip_forward=1
+    # Configura NAT para o trafego da LAN para a Internet
+    iptables -t nat -A POSTROUTING -s $localnet -o $ifaceEx -j MASQUERADE
 
-    # Direcionar navegacao para a porta do proxy/squid (3128):
-    	iptables -t nat -A PREROUTING -i $ifaceIn -p tcp --dport 80 -j REDIRECT --to-port 3128
+    # Direcionar navegacao na porta HTTP (80) para a porta do proxy/squid (3128)
+    iptables -t nat -A PREROUTING -i $ifaceIn -p tcp --dport 80 -j REDIRECT --to-port 3128
 }
 
 
-default(){
+default(){ # Funcao para definir as regras padrao
 
-    # Determinar as regras padroes para o firewall:
-    	iptables -t filter -P INPUT DROP
-    	iptables -t filter -P OUTPUT DROP
-    	iptables -t filter -P FORWARD DROP
+    # Bloqueia tudo que não foi explicitamente liberado
+    iptables -t filter -P INPUT DROP
+    iptables -t filter -P OUTPUT DROP
+    iptables -t filter -P FORWARD DROP
 }
 
 
-iniciar(){
+#==  Funcoes de controle  =========================================================================#
 
-    # Executa todas as funcoes criadas:
-    	local
-    	forward
-    	default
-    	internet
+
+iniciar(){ # Funcao para iniciar o firewall
+
+    local
+    forward
+    default
+    internet
 }
 
 
-#===============================================================================================================#
+parar(){ # Funcao para parar o firewall
 
-
-parar(){
-
-    # Desabilita o firewall:
-    	iptables -t filter -P INPUT ACCEPT
-    	iptables -t filter -P OUTPUT ACCEPT
-    	iptables -t filter -P FORWARD ACCEPT
-    	iptables -t filter -F
+    iptables -t filter -P INPUT ACCEPT
+    iptables -t filter -P OUTPUT ACCEPT
+    iptables -t filter -P FORWARD ACCEPT
+    iptables -t filter -F
 }
 
 
-#===============================================================================================================#
+#==  Script para controle do firewall  ============================================================#
 
 
-# Script de execucao:
 case $1 in
 start|Start|START)iniciar;;
 stop|Stop|STOP)parar;;
 restart|Restart|RESTART)parar;iniciar;;
 listar|list)iptables -t filter -nvL;;
 vi|conf)sudo vi /usr/local/sbin/firewall;;
-*)echo "\033[0;33mExecute o comando firewall com os parametros start, stop, restart, list, vi.";;
+*)echo "usage: 
+firewall [start|stop|restart|list|vi]";;
 esac
