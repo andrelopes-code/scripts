@@ -10,7 +10,8 @@ localnet="192.168.15.0/24"  # endereço da rede local
 #==  Funcoes para definicao de regras =============================================================#
 
 
-local(){ # Funcao para configuracao das regras de firewall para comunicacao local
+local(){
+    # Funcao para configuracao das regras de firewall para comunicacao local
 
     # Libera a comunicacao (I/O) do servidor com a rede local e com a internet
     # Permite trafego TCP e UDP de entrada e saida nas portas
@@ -40,7 +41,8 @@ local(){ # Funcao para configuracao das regras de firewall para comunicacao loca
 }
 
 
-forward(){ # Funcao para encaminhamento de trafego entre WAN e LAN
+forward(){
+    # Funcao para encaminhamento de trafego entre WAN e LAN
 
     # Libera o trafego entre a INTERNET e a REDE LOCAL
     iptables -t filter -A FORWARD -i $ifaceEx -p tcp -m multiport --sports 80,443 -d $localnet -j ACCEPT
@@ -56,19 +58,20 @@ forward(){ # Funcao para encaminhamento de trafego entre WAN e LAN
 }
 
 
-internet(){ # Funcao para habilitar o compartilhamento da internet entre as redes
+internet(){ 
+    # Funcao para habilitar o compartilhamento da internet entre as redes
 
     # Habilita o encaminhamento de IP
     sysctl -w net.ipv4.ip_forward=1
     # Configura NAT para o trafego da LAN para a Internet
     iptables -t nat -A POSTROUTING -s $localnet -o $ifaceEx -j MASQUERADE
-
     # Direcionar navegacao na porta HTTP (80) para a porta do proxy/squid (3128)
     iptables -t nat -A PREROUTING -i $ifaceIn -p tcp --dport 80 -j REDIRECT --to-port 3128
 }
 
 
-default(){ # Funcao para definir as regras padrao
+default(){
+    # Funcao para definir as regras padrao
 
     # Bloqueia tudo que não foi explicitamente liberado
     iptables -t filter -P INPUT DROP
@@ -80,7 +83,8 @@ default(){ # Funcao para definir as regras padrao
 #==  Funcoes de controle  =========================================================================#
 
 
-iniciar(){ # Funcao para iniciar o firewall
+iniciar(){
+    # Funcao para iniciar o firewall
 
     local
     forward
@@ -89,7 +93,8 @@ iniciar(){ # Funcao para iniciar o firewall
 }
 
 
-parar(){ # Funcao para parar o firewall
+parar(){
+    # Funcao para parar o firewall
 
     iptables -t filter -P INPUT ACCEPT
     iptables -t filter -P OUTPUT ACCEPT
