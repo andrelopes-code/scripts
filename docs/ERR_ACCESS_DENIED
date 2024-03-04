@@ -18,8 +18,8 @@
                 align-items: center;
                 height: 100vh;
                 font-family: 'Just Sans', sans-serif;
-                background-color: #1c1c1c;
-                color: #ffffff;
+                background-color: #fdfdfd;
+                color: #161616;
                 animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
             }
 
@@ -28,7 +28,7 @@
                 max-width: 400px;
                 text-align: center;
                 padding: 30px;
-                background-color: #2c2c2c;
+                background-color: #dddddd;
                 border-radius: 4px;
                 box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
             }
@@ -53,7 +53,7 @@
 
 
             .contact {
-                color: #4ca1af;
+                color: #44a5b5;
                 text-decoration: none;
                 font-weight: bold;
             }

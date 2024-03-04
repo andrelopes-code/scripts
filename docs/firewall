@@ -38,6 +38,10 @@ local(){
     # Libera trafego nas portas do Samba (139 e 445)
     iptables -t filter -A INPUT -p tcp -m multiport --dports 139,445 -j ACCEPT
     iptables -t filter -A OUTPUT -p tcp -m multiport --sports 139,445 -j ACCEPT
+    
+    # SSH
+    iptables -t filter -A INPUT -p tcp --dport 22 -j ACCEPT
+    iptables -t filter -A OUTPUT -p tcp --sport 22 -j ACCEPT
 }
 
 
