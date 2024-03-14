@@ -4,7 +4,7 @@
 # Variaveis locais
 ifaceEx="enp0s3"            # Interface de rede externa
 ifaceIn="enp0s8"            # Interface de rede interna
-localnet="10.10.10.0/24"  # endereço da rede local                  
+localnet="10.10.10.0/24"    # endereço da rede local                  
 
 
 #==  Funcoes para definicao de regras =============================================================#
